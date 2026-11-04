@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact — Aamir Javed</title>
+  <meta name="description" content="Get in touch with Aamir Javed about cyber security roles, VAPT or ISO 27001 projects, or collaboration.">
+  <script>document.documentElement.classList.add('js');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- NAV -->
+  <header class="nav">
+    <div class="nav__inner">
+      <a class="nav__brand" href="index.html">Aamir Javed</a>
+      <nav class="nav__links" aria-label="Primary">
+        <a href="index.html#about">About</a>
+        <a href="index.html#skills">Skills</a>
+        <a href="experience.html" data-page="experience.html">Experience</a>
+        <a href="contact.html" data-page="contact.html">Contact</a>
+      </nav>
+      <a class="btn btn--solid nav__cta" href="contact.html">Get in touch</a>
+      <button class="nav__toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu"><span></span><span></span></button>
+    </div>
+  </header>
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="index.html#about">About</a>
+    <a href="index.html#skills">Skills</a>
+    <a href="experience.html">Experience</a>
+    <a href="contact.html">Contact</a>
+    <small>Riyadh, Saudi Arabia</small>
+  </div>
+
+  <main id="main">
+
+    <!-- [LIGHT] PAGE HEADER -->
+    <section class="section--light page-head">
+      <div class="wrap">
+        <div class="page-head__grid">
+          <div>
+            <span class="eyebrow reveal">Contact</span>
+            <h1 class="text-billboard reveal" style="--d:.08s">Let’s start a<br><em>conversation</em>.</h1>
+          </div>
+          <div class="reveal" style="--d:.16s">
+            <p class="text-body" style="max-width:26rem">
+              Whether it is a security assessment, an ISO 27001 project, a role or just a question about my work, I would love to hear from you.
+            </p>
+          </div>
+        </div>
+        <div class="ph ar-219 reveal" style="margin-top:clamp(2.5rem,5vw,4rem)" role="img" aria-label="Placeholder for a wide workspace or city photo">
+          <div class="ph__label">Wide banner image<span>21:9 · replace later</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- [DARK] CONTACT FORM + DETAILS -->
+    <section class="section section--dark">
+      <div class="wrap">
+        <div class="contact-grid">
+
+          <div class="reveal">
+            <span class="eyebrow">Details</span>
+            <h2 class="text-section-title">Reach me <em>directly</em></h2>
+            <ul class="contact-list">
+              <!-- TODO: replace with your real email address -->
+              <li><span>Email</span><a href="mailto:your-email@example.com">your-email@example.com</a></li>
+              <li><span>Location</span><p>Riyadh, Saudi Arabia</p></li>
+              <li><span>LinkedIn</span><a href="https://www.linkedin.com/in/aamir-javed-289a09279" target="_blank" rel="noopener">aamir-javed</a></li>
+              <li><span>CV</span><a href="AAMIR%20JAVED%20CV_cs.docx" download>Download CV</a></li>
+            </ul>
+          </div>
+
+          <div class="reveal" style="--d:.1s">
+            <form id="contact-form" class="form" novalidate>
+              <div class="form__row">
+                <div class="field">
+                  <label for="name">Your name</label>
+                  <input id="name" name="name" type="text" autocomplete="name" placeholder="Jane Doe" required>
+                  <span class="field__error" aria-live="polite"></span>
+                </div>
+                <div class="field">
+                  <label for="email">Email address</label>
+                  <input id="email" name="email" type="email" autocomplete="email" placeholder="jane@company.com" required>
+                  <span class="field__error" aria-live="polite"></span>
+                </div>
+              </div>
+              <div class="field">
+                <label for="subject">I’m reaching out about</label>
+                <select id="subject" name="subject" required>
+                  <option value="">Select a topic</option>
+                  <option>A job opportunity</option>
+                  <option>Security assessment (VAPT)</option>
+                  <option>ISO 27001 / ISMS project</option>
+                  <option>Collaboration</option>
+                  <option>Something else</option>
+                </select>
+                <span class="field__error" aria-live="polite"></span>
+              </div>
+              <div class="field">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" placeholder="Tell me a little about what you have in mind…" required></textarea>
+                <span class="field__error" aria-live="polite"></span>
+              </div>
+              <div class="form__foot">
+                <button class="btn btn--light" type="submit">Send message <span class="arrow">→</span></button>
+                <span class="form__note">I usually reply within 1–2 working days.</span>
+              </div>
+            </form>
+
+            <div class="form-success" id="form-success" role="status">
+              <h3>Thank you — message received.</h3>
+              <p>This is a demo form, so nothing was actually sent. Once the site goes live this will reach my inbox.</p>
+              <p style="margin-top:1.25rem"><button class="btn btn--ghost-dark" type="button" id="form-reset">Send another</button></p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- [DARK] FOOTER -->
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer__grid">
+        <div>
+          <div class="footer__brand">Aamir Javed</div>
+          <p>Cyber security professional — ISO 27001, VAPT and telecom engineering. Riyadh, Saudi Arabia.</p>
+        </div>
+        <div>
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="index.html#about">About</a></li>
+            <li><a href="index.html#skills">Skills</a></li>
+            <li><a href="experience.html">Experience</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="https://www.linkedin.com/in/aamir-javed-289a09279" target="_blank" rel="noopener">LinkedIn</a></li>
+            <li><a href="AAMIR%20JAVED%20CV_cs.docx" download>Download CV</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__base">
+        <span>© <span data-year>2026</span> Aamir Javed</span>
+        <span>Riyadh · KSA</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
