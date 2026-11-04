@@ -48,14 +48,15 @@ Nav, mobile menu and footer markup are **duplicated in each HTML page** — chan
 - [x] Home, Experience and Contact pages built
 - [x] Dummy content replaced with CV content (name, roles, education, certs, skills, LinkedIn, CV download)
 - [x] Browser check (no console errors, no horizontal overflow, accordion/menu/form tested)
-- [ ] **Real email address** (contact page currently shows `your-email@example.com`; search for it in `contact.html`; the footers show LinkedIn and CV only)
+- [x] Real email address added to `contact.html`: ajaved.kj@gmail.com (footers show LinkedIn and CV only)
 - [ ] Phone number — not in CV, intentionally not shown; add only if wanted
 - [ ] Replace the 3 image placeholders with real photos
 - [ ] Decide whether 15 years is the figure to show (see Open questions)
 - [ ] Decide whether to publish the .docx CV publicly (it is linked as a download)
 - [ ] Connect contact form to a real service (currently demo only — nothing is sent)
 - [ ] Optional extras: GitHub / bug bounty profile links, availability line, testimonials
-- [ ] Final review, then publish (hosting not yet decided)
+- [x] GitHub repo set up: https://github.com/ajavedgit/profile-website (public, branch `main`; CV `.docx`/`.pdf` files are git-ignored)
+- [ ] Final review, then publish (hosting not yet decided; GitHub Pages is an option)
 
 ## Image placeholders to replace
 Placeholders are `.ph` blocks. To use a real image, replace the block with an `<img>` that has `alt` text and the same aspect-ratio class (`ar-45`, `ar-34`, `ar-219`).
@@ -66,7 +67,6 @@ Placeholders are `.ph` blocks. To use a real image, replace the block with an `<
 | Contact header | Wide banner | 21:9 |
 
 ## Open questions for the owner
-- Email address to show publicly (the CV has none).
 - CV summary says "15 years" but the first listed job starts in 2006 (about 20 years). Site uses 15+ as in the CV.
 - Alcatel-Lucent entry in the CV says ALU/STC project work; site keeps CV wording.
 - Is the Nokia–STC role still current (CV says "Present")? It is shown as current.
@@ -79,4 +79,6 @@ Placeholders are `.ph` blocks. To use a real image, replace the block with an `<
 
 ## Progress log
 - **2026-11-04** — Reviewed the two reference documents. Built the first dummy version: 3 pages, shared CSS and JS, image placeholders. Created this CLAUDE.md.
-- **2026-11-04** — Read the CV and replaced all dummy content with Aamir's real details: 6 roles, education, certifications, skills as tags, community work, LinkedIn, CV download. Removed invented numbers and skill percentages. Email left as a placeholder. Re-checked in a browser. **Next:** owner supplies email and photos.
+- **2026-11-04** — Read the CV and replaced all dummy content with Aamir's real details: 6 roles, education, certifications, skills as tags, community work, LinkedIn, CV download. Removed invented numbers and skill percentages. Re-checked in a browser. Email left as a placeholder at first.
+- **2026-11-04** — Owner chose ajaved.kj@gmail.com as the public email; added to the Contact page. **Next:** owner supplies photos.
+- **2026-11-04** — Set up git and GitHub: installed GitHub CLI, signed in as `ajavedgit`, created public repo https://github.com/ajavedgit/profile-website and pushed `main`. Added `.gitignore` so `*.docx`/`*.pdf` (the CV) are not published.
