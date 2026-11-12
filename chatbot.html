@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ask Aamir's AI — Chatbot Demo</title>
   <meta name="description" content="A simple demo chatbot that answers questions about Aamir Javed, built with plain HTML, JavaScript and the Groq API.">
+  <!-- Security: this page can only load its own scripts/styles and can only send data to Groq (direct demo mode)
+       or to a Cloudflare Worker relay. Nothing can be sent anywhere else, even if something tried. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://api.groq.com https://*.workers.dev; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
@@ -107,10 +111,10 @@
 
         <details class="keybox" id="keybox" hidden>
           <summary>Learner / developer setup: try it with your own key</summary>
-          <p>Paste your own Groq API key to test this demo. It is kept only in this browser tab and sent only to api.groq.com.</p>
-          <form class="keybox__row" id="key-form">
+          <p><strong>Your key stays with you.</strong> It is held only in this page's memory: it is not saved anywhere, not stored on this website's server (there isn't one), and it is deleted the moment you refresh or close the page. It is sent only to api.groq.com, the AI provider, to answer your questions.</p>
+          <form class="keybox__row" id="key-form" autocomplete="off">
             <label for="key-input" style="position:absolute;left:-9999px">Groq API key</label>
-            <input id="key-input" type="password" autocomplete="off" placeholder="gsk_…" spellcheck="false">
+            <input id="key-input" type="password" autocomplete="off" data-1p-ignore data-lpignore="true" placeholder="gsk_…" spellcheck="false" autocapitalize="off">
             <button class="btn btn--light" type="submit">Use key</button>
           </form>
         </details>
@@ -118,7 +122,10 @@
         <div class="chat" aria-label="Chat with Aamir's AI assistant">
           <div class="chat__head">
             <span><i></i>Aamir’s AI assistant</span>
-            <button class="chat__clear" id="clear-btn" type="button">Clear chat</button>
+            <span>
+              <button class="chat__clear" id="forget-btn" type="button" hidden title="Remove the key you pasted from this page's memory">Forget my key</button>
+              <button class="chat__clear" id="clear-btn" type="button" style="margin-left:1rem">Clear chat</button>
+            </span>
           </div>
           <div class="chat__log" id="log" role="log" aria-live="polite"></div>
           <div class="chat__suggest" id="suggest">

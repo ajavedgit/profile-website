@@ -83,19 +83,28 @@
   var keyBox = document.getElementById('keybox');
   var keyForm = document.getElementById('key-form');
   var keyInput = document.getElementById('key-input');
+  var forgetBtn = document.getElementById('forget-btn');
 
   var history = [];   // [{role:'user'|'assistant', content:'...'}] — the AI has no memory, so we resend this
   var busy = false;
   var asked = 0;
 
-  // A key comes from config.js, or (learner fallback) is pasted by the person using the page and kept for this tab only.
+  // A key comes from config.js (owner, local testing only), or — learner fallback — is pasted by the visitor.
+  // A pasted key lives ONLY in this variable (page memory): it is never written to localStorage, sessionStorage,
+  // cookies or any server, and it vanishes on refresh, close or "Forget my key".
+  var pastedKey = '';
+  try { sessionStorage.removeItem('xai_demo_key'); } catch (e) { /* clean up anything stored by an older version */ }
+
   function configuredKey() {
     var k = (cfg.apiKey || '').trim();
     return k && k.indexOf('PASTE') !== 0 ? k : '';
   }
   function getKey() {
-    if (configuredKey()) return configuredKey();
-    try { return sessionStorage.getItem('xai_demo_key') || ''; } catch (e) { return ''; }
+    return configuredKey() || pastedKey;
+  }
+  function forgetKey() {
+    pastedKey = '';
+    if (keyInput) keyInput.value = '';
   }
   function mode() {
     if (getKey()) return 'direct';
@@ -129,6 +138,7 @@
     inputEl.disabled = busy || off || capped;
     sendBtn.disabled = busy || off || capped;
     keyBox.hidden = !off;                         // the "use your own key" box only shows when the chat is offline
+    forgetBtn.hidden = !pastedKey;                // "Forget my key" only shows while a pasted key is in memory
     if (off || capped || history.length) suggestEl.style.display = 'none';
     else suggestEl.style.display = '';
   }
@@ -236,11 +246,16 @@
     e.preventDefault();
     var k = keyInput.value.trim();
     if (!k) return;
-    try { sessionStorage.setItem('xai_demo_key', k); } catch (err) { cfg.apiKey = k; }   // private mode: lasts until reload
-    keyInput.value = '';
+    pastedKey = k;                    // memory only — see forgetKey()
+    keyInput.value = '';              // don't leave the key sitting in the form field
     reset();
     inputEl.focus();
   });
+  forgetBtn.addEventListener('click', function () { forgetKey(); reset(); });
+
+  // Wipe the key whenever the visitor leaves or the page is restored from the back/forward cache.
+  window.addEventListener('pagehide', forgetKey);
+  window.addEventListener('pageshow', function (e) { if (e.persisted) { forgetKey(); reset(); } });
 
   var yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
