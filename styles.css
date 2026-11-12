@@ -214,7 +214,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .hero__title { margin-bottom: 2rem; }
 .hero__intro { max-width: 34rem; }
 .hero__actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2.25rem; }
-.hero__media { position: relative; }
+.hero__media { position: relative; width: 100%; max-width: 18rem; }
 .hero__media .ph { box-shadow: 0 40px 80px -40px rgba(20, 21, 29, 0.45); border-radius: 1.25rem; }
 .hero__tag {
   position: absolute; left: -0.75rem; bottom: 2rem;
@@ -226,7 +226,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .hero__tag i { width: 8px; height: 8px; border-radius: 50%; background: var(--champagne); box-shadow: 0 0 0 4px rgba(200, 184, 166, 0.25); }
 @media (min-width: 960px) {
   .hero__grid { grid-template-columns: 7fr 5fr; gap: 4rem; }
-  .hero__media { padding-top: 3rem; }
+  .hero__media { padding-top: 2rem; max-width: 20rem; justify-self: end; }
 }
 
 /* Stats */

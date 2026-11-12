@@ -68,7 +68,7 @@ Nav, mobile menu and footer markup are **duplicated in each HTML page** — chan
 - [x] Browser check (no console errors, no horizontal overflow, accordion/menu/form tested)
 - [x] Real email address added to `contact.html`: ajaved.kj@gmail.com (footers show LinkedIn and CV only)
 - [ ] Phone number — not in CV, intentionally not shown; add only if wanted
-- [x] Hero portrait added (`images/aamir-javed.jpg`, optimised from `Aamir_photo.jpg`; not yet pushed)
+- [x] Hero portrait added (`images/aamir-javed.jpg`, optimised from `Aamir_photo.jpg`; pushed in commit 67e6f0f and live)
 - [ ] Replace the remaining 2 image placeholders (About workspace photo, Contact banner) with real photos
 - [ ] Decide whether 15 years is the figure to show (see Open questions)
 - [ ] Decide whether to publish the .docx CV publicly (it is linked as a download)
@@ -113,4 +113,5 @@ Placeholders are `.ph` blocks. To use a real image, replace the block with `<div
 - **2026-11-12** — Linked all "Get in touch" buttons to `chatbot.html`. Made the chat safe for public visitors: offline mode, 20-question cap, stricter "profile only" scope, and a relay (`worker/chat-proxy.js`) so the key never reaches the browser. Tested: Get-in-touch click, on-topic and off-topic/injection questions, offline and proxy modes, and 10 relay edge cases. **Next:** owner deploys the Worker and sets `PROXY_URL`; then commit/push.
 - **2026-11-12** — Added a "Chatbot" menu item right after "Contact" (desktop nav, mobile menu, footer) on all three pages. Nav order is now About · Skills · Experience · Contact · Chatbot. Verified no crowding at 900px and no overflow at 375px. Not pushed yet.
 - **2026-11-12** — Added Aamir's portrait to the home hero: optimised copy `images/aamir-javed.jpg` (171 KB, from the 676 KB original `Aamir_photo.jpg`), new `.photo` style in `styles.css`, descriptive alt text. Checked at 1280px and 375px (loads, 4:5 crop keeps the face, no overflow). Not pushed yet. The original `Aamir_photo.jpg` is untracked in the project root.
+- **2026-11-12** — Hero portrait was too large; made it smaller via `.hero__media` in `styles.css` (max-width 20rem on desktop = 320x400, 18rem on mobile = 288x360, right-aligned on desktop). Checked 1366x768 (whole photo plus start of stats visible without scrolling), 1920x1080 and 375px. Not pushed yet. To resize again, change `max-width` on `.hero__media`.
 - **2026-11-04** — Set up git and GitHub: installed GitHub CLI, signed in as `ajavedgit`, created public repo https://github.com/ajavedgit/profile-website and pushed `main`. Added `.gitignore` so `*.docx`/`*.pdf` (the CV) are not published.
