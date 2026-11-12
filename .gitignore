@@ -2,6 +2,12 @@
 *.docx
 *.pdf
 
+# Chatbot API key — must never be published
+config.js
+*api*key*
+*.env
+.env*
+
 # OS / editor files
 Thumbs.db
 .DS_Store

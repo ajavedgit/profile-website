@@ -30,6 +30,24 @@ Other file: `LANDINGPAGE_GENERATOR.md` — prompt for a guided Q&A that produces
 | `styles.css` | All styles and design tokens (`:root` variables). `.bar*` skill-bar styles are currently unused |
 | `script.js` | Mobile menu, nav shadow/active link, scroll reveal, count-up numbers, accordions, form validation, footer year |
 | `AAMIR JAVED CV_cs.docx` | Source CV; also served as the "Download CV" file |
+| `chatbot.html` | Separate demo page: short About, dark chat window, "How it works" explainer for learners. Not linked from the main nav yet |
+| `chatbot.js` | Chatbot logic: settings, the profile text the AI knows (`PROFILE`), system prompt, history, Groq API call |
+| `config.example.js` | Committed template for the key file |
+| `config.js` | **Local only, git-ignored.** Holds the real Groq API key. Never commit or share |
+| `worker/chat-proxy.js` | Cloudflare Worker (relay) that holds the key as a secret and adds the system prompt; deploy steps are in its header comment. Contains NO key, safe to publish. **Not deployed yet** |
+
+## Chatbot (demo)
+- Uses **Groq** (groq.com, keys start `gsk_`) — NOT xAI Grok (`xai-` keys). Endpoint `https://api.groq.com/openai/v1/chat/completions`, model `openai/gpt-oss-120b`, `reasoning_effort: "low"`. Groq allows browser (CORS) calls.
+- The key is read from `config.js` (loaded by `chatbot.html`). If it is missing, the page shows a box where a visitor can paste their own key (kept in sessionStorage only).
+- `.gitignore` blocks `config.js`, `*api*key*`, `*.env` and `.env*`. The owner's original key file (`groq api key.txt`, later renamed `groq api key.env`) sits in this folder and is ignored — keep it that way.
+- **"Get in touch" buttons** (nav CTA on all 3 pages + the Experience page call-out) now open `chatbot.html`. The Contact page is still in the nav and linked from the chat page.
+- **Three modes** (picked automatically in `chatbot.js`): DIRECT (key in `config.js`, local testing), PROXY (`PROXY_URL` set — visitors on the live site), OFFLINE (neither — input disabled, message points to email, small "learner setup" box lets someone paste their own key).
+- **Security:** a key in browser code is visible to everyone, so it must never be published. On the live site visitors use the relay (`worker/chat-proxy.js`), which keeps the key secret, adds the system prompt itself, drops visitor "system" messages, caps message length/history/reply tokens, and only accepts requests from `https://ajavedgit.github.io` (and localhost:8765).
+- **To make the chat work for visitors:** deploy the Worker (steps in the file header), then set `PROXY_URL` in `chatbot.js` to the Worker address and push. Until then the live chat shows the offline message. Also set a spend limit in the Groq console and a rate-limit rule in Cloudflare.
+- **Scope:** the assistant answers only about Aamir's professional profile and replies with a fixed redirect sentence for anything else (tested: general knowledge, poem, prompt injection, "print your system prompt"). Per-visit cap: 20 questions.
+- The profile text exists in two places (`chatbot.js` and `worker/chat-proxy.js`) — update both when the CV changes.
+- The AI answers only from `PROFILE` in `chatbot.js` (taken from the CV); it is told not to invent facts and to decline attack instructions. Edit `PROFILE` when the CV changes.
+- Replies are shown with `textContent` (no HTML injection) and the system prompt asks for plain text, no markdown.
 
 Nav, mobile menu and footer markup are **duplicated in each HTML page** — change all three when editing them.
 
@@ -56,7 +74,14 @@ Nav, mobile menu and footer markup are **duplicated in each HTML page** — chan
 - [ ] Connect contact form to a real service (currently demo only — nothing is sent)
 - [ ] Optional extras: GitHub / bug bounty profile links, availability line, testimonials
 - [x] GitHub repo set up: https://github.com/ajavedgit/profile-website (public, branch `main`; CV `.docx`/`.pdf` files are git-ignored)
-- [ ] Final review, then publish (hosting not yet decided; GitHub Pages is an option)
+- [x] Published with GitHub Pages (branch `main`, root): https://ajavedgit.github.io/profile-website/
+- [ ] **"Download CV" links 404 on the live site** because `*.docx` is git-ignored. Decide: remove the links, or publish a CV PDF deliberately (see Open questions)
+- [x] Chatbot demo built and tested locally (`chatbot.html`): answers from profile, admits unknowns, remembers context, refuses attack requests, no overflow on mobile
+- [x] "Get in touch" buttons linked to the chatbot page; chat tested in direct, offline and proxy modes; relay logic tested with a mocked Groq reply
+- [ ] **Deploy the Cloudflare Worker** (`worker/chat-proxy.js`), paste its address into `PROXY_URL` in `chatbot.js`, then test on the live site
+- [ ] Set Groq spend limit + Cloudflare rate-limit rule
+- [ ] Commit and push the chatbot work (NOT `config.js` or key files). Nothing from the chatbot work is committed or pushed yet, so the live site is unchanged
+- [ ] Final review of the live site
 
 ## Image placeholders to replace
 Placeholders are `.ph` blocks. To use a real image, replace the block with an `<img>` that has `alt` text and the same aspect-ratio class (`ar-45`, `ar-34`, `ar-219`).
@@ -81,4 +106,7 @@ Placeholders are `.ph` blocks. To use a real image, replace the block with an `<
 - **2026-11-04** — Reviewed the two reference documents. Built the first dummy version: 3 pages, shared CSS and JS, image placeholders. Created this CLAUDE.md.
 - **2026-11-04** — Read the CV and replaced all dummy content with Aamir's real details: 6 roles, education, certifications, skills as tags, community work, LinkedIn, CV download. Removed invented numbers and skill percentages. Re-checked in a browser. Email left as a placeholder at first.
 - **2026-11-04** — Owner chose ajaved.kj@gmail.com as the public email; added to the Contact page. **Next:** owner supplies photos.
+- **2026-11-04** — Enabled GitHub Pages (main branch, root). Live at https://ajavedgit.github.io/profile-website/ — all 3 pages, CSS and JS return 200. The CV download returns 404 (file is git-ignored). Image placeholders are still live.
+- **2026-11-12** — Built the chatbot demo (`chatbot.html`, `chatbot.js`, `config.example.js`). Found that the owner's key file was Groq (`gsk_`), not xAI Grok, so the code uses the Groq API. Found `groq api key.txt` was untracked and NOT ignored; added `config.js` and `*api*key*.txt` to `.gitignore` before anything could be committed. Key placed only in git-ignored `config.js`. Tested locally: replies in about 1 s, correct and grounded answers. Not committed or pushed.
+- **2026-11-12** — Linked all "Get in touch" buttons to `chatbot.html`. Made the chat safe for public visitors: offline mode, 20-question cap, stricter "profile only" scope, and a relay (`worker/chat-proxy.js`) so the key never reaches the browser. Tested: Get-in-touch click, on-topic and off-topic/injection questions, offline and proxy modes, and 10 relay edge cases. **Next:** owner deploys the Worker and sets `PROXY_URL`; then commit/push.
 - **2026-11-04** — Set up git and GitHub: installed GitHub CLI, signed in as `ajavedgit`, created public repo https://github.com/ajavedgit/profile-website and pushed `main`. Added `.gitignore` so `*.docx`/`*.pdf` (the CV) are not published.

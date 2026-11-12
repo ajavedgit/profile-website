@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ask Aamir's AI — Chatbot Demo</title>
+  <meta name="description" content="A simple demo chatbot that answers questions about Aamir Javed, built with plain HTML, JavaScript and the Groq API.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Page-specific styles for the chatbot demo (colours come from styles.css tokens) */
+    .demo-top { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem var(--gutter); max-width: var(--max); margin: 0 auto; }
+    .demo-top a.brand { font-size: .8rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+    .demo-top a.back { font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--slate-strong); }
+    .demo-top a.back:hover { color: var(--obsidian); }
+    .intro { padding: clamp(2.5rem, 6vw, 5rem) 0 clamp(3rem, 6vw, 5rem); }
+    .intro__grid { display: grid; gap: 2.5rem; }
+    @media (min-width: 900px) { .intro__grid { grid-template-columns: 6fr 5fr; gap: 5rem; align-items: end; } }
+    .badge { display: inline-block; padding: .35rem .85rem; border-radius: 999px; border: 1px solid rgba(20,21,29,.2); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--slate-strong); margin-bottom: 1.25rem; }
+
+    /* Key box (shown only when no key is configured) */
+    .keybox { margin-bottom: 1rem; padding: .9rem 1.25rem; border: 1px solid var(--hair-dark); border-radius: 1rem; background: var(--charcoal); }
+    .keybox summary { cursor: pointer; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--slate); }
+    .keybox > p, .keybox > form { margin-top: .85rem; }
+    .keybox p { font-size: .85rem; color: var(--body-dark); }
+    .keybox__row { display: flex; gap: .6rem; flex-wrap: wrap; }
+    .keybox input { flex: 1 1 14rem; min-width: 0; background: var(--obsidian); border: 1px solid var(--hair-dark); border-radius: 999px; padding: .7rem 1.1rem; color: var(--chalk); }
+    .keybox input:focus { outline: none; border-color: var(--champagne); }
+    .keybox[hidden] { display: none; }
+
+    /* Chat window */
+    .chat { background: var(--charcoal); border: 1px solid var(--hair-dark); border-radius: 1.25rem; display: flex; flex-direction: column; height: min(36rem, 75vh); overflow: hidden; }
+    .chat__head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: .9rem 1.25rem; border-bottom: 1px solid var(--hair-dark); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--body-dark); }
+    .chat__head i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--champagne); margin-right: .6rem; }
+    .chat__clear { background: none; border: 0; color: var(--slate); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; cursor: pointer; }
+    .chat__clear:hover { color: var(--chalk); }
+    .chat__log { flex: 1; overflow-y: auto; padding: 1.25rem; display: flex; flex-direction: column; gap: .9rem; scroll-behavior: smooth; }
+    .msg { max-width: 85%; padding: .8rem 1.05rem; border-radius: 1.1rem; font-size: .95rem; line-height: 1.55; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .msg--bot { align-self: flex-start; background: var(--obsidian); color: var(--chalk); border: 1px solid var(--hair-dark); border-bottom-left-radius: .3rem; }
+    .msg--user { align-self: flex-end; background: var(--paper); color: var(--ink); border-bottom-right-radius: .3rem; }
+    .msg--error { color: #E8A0A0; border-color: rgba(232, 160, 160, .4); }
+    .typing { display: inline-flex; gap: 5px; padding: .35rem 0; }
+    .typing span { width: 6px; height: 6px; border-radius: 50%; background: var(--slate); animation: blink 1.2s infinite ease-in-out; }
+    .typing span:nth-child(2) { animation-delay: .15s; }
+    .typing span:nth-child(3) { animation-delay: .3s; }
+    @keyframes blink { 0%, 80%, 100% { opacity: .25; } 40% { opacity: 1; } }
+    .chat__suggest { display: flex; flex-wrap: wrap; gap: .5rem; padding: 0 1.25rem .9rem; }
+    .chip { background: transparent; cursor: pointer; font-size: .78rem; padding: .45rem .95rem; border-radius: 999px; border: 1px solid var(--hair-dark); color: var(--body-dark); transition: background .3s, color .3s; }
+    .chip:hover { background: var(--chalk); color: var(--obsidian); }
+    .chat__form { display: flex; gap: .6rem; padding: 1rem 1.25rem; border-top: 1px solid var(--hair-dark); }
+    .chat__input { flex: 1; min-width: 0; background: var(--obsidian); border: 1px solid var(--hair-dark); border-radius: 999px; padding: .8rem 1.2rem; color: var(--chalk); font-size: .95rem; }
+    .chat__input:focus { outline: none; border-color: var(--champagne); }
+    .chat__input::placeholder { color: rgba(255,255,255,.3); }
+    .chat__send:disabled, .chat__input:disabled { opacity: .5; cursor: not-allowed; }
+    .note { margin-top: 1rem; font-size: .78rem; color: var(--slate); }
+    @media (prefers-reduced-motion: reduce) { .typing span { animation: none; opacity: .6; } .chat__log { scroll-behavior: auto; } }
+  </style>
+</head>
+<body>
+
+  <!-- [LIGHT] TOP BAR -->
+  <div class="section--light">
+    <div class="demo-top">
+      <a class="brand" href="index.html">Aamir Javed</a>
+      <a class="back" href="index.html">← Back to website</a>
+    </div>
+  </div>
+
+  <main id="main">
+
+    <!-- [LIGHT] ABOUT US (dummy profile) -->
+    <section class="section--light intro">
+      <div class="wrap">
+        <div class="intro__grid">
+          <div>
+            <span class="badge">Chatbot demo</span>
+            <h1 class="text-billboard">About<br><em>Aamir</em></h1>
+          </div>
+          <div>
+            <p class="text-body">
+              I’m a cyber security professional based in Riyadh with about 15 years in IT and telecom.
+              I implement ISO 27001 programmes, run penetration tests for web, network and mobile
+              applications, and lead engineering documentation for telecom projects.
+            </p>
+            <dl class="facts">
+              <div><dt>Based in</dt><dd>Riyadh, Saudi Arabia</dd></div>
+              <div><dt>Focus</dt><dd>ISO 27001 · VAPT · GRC</dd></div>
+              <div><dt>Certified</dt><dd>CompTIA Security+</dd></div>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- [DARK] CHATBOT -->
+    <section class="section section--dark" id="chat-section">
+      <div class="wrap">
+        <div class="sec-head">
+          <div>
+            <span class="eyebrow">Get in touch</span>
+            <h2 class="text-section-title">Ask my <em>AI assistant</em></h2>
+          </div>
+          <p class="sec-head__meta">Powered by Groq</p>
+        </div>
+
+        <details class="keybox" id="keybox" hidden>
+          <summary>Learner / developer setup: try it with your own key</summary>
+          <p>Paste your own Groq API key to test this demo. It is kept only in this browser tab and sent only to api.groq.com.</p>
+          <form class="keybox__row" id="key-form">
+            <label for="key-input" style="position:absolute;left:-9999px">Groq API key</label>
+            <input id="key-input" type="password" autocomplete="off" placeholder="gsk_…" spellcheck="false">
+            <button class="btn btn--light" type="submit">Use key</button>
+          </form>
+        </details>
+
+        <div class="chat" aria-label="Chat with Aamir's AI assistant">
+          <div class="chat__head">
+            <span><i></i>Aamir’s AI assistant</span>
+            <button class="chat__clear" id="clear-btn" type="button">Clear chat</button>
+          </div>
+          <div class="chat__log" id="log" role="log" aria-live="polite"></div>
+          <div class="chat__suggest" id="suggest">
+            <button class="chip" type="button">What does Aamir do?</button>
+            <button class="chip" type="button">Tell me about his VAPT experience</button>
+            <button class="chip" type="button">Which certifications does he hold?</button>
+            <button class="chip" type="button">How can I contact him?</button>
+          </div>
+          <form class="chat__form" id="chat-form" autocomplete="off">
+            <label for="chat-input" style="position:absolute;left:-9999px">Your question</label>
+            <input class="chat__input" id="chat-input" type="text" maxlength="500" placeholder="Ask anything about my work or experience…">
+            <button class="btn btn--light chat__send" id="send-btn" type="submit">Send</button>
+          </form>
+        </div>
+        <p class="note">This assistant only answers questions about Aamir’s professional profile, and AI answers can be wrong.
+          Prefer to write? <a href="contact.html" style="text-decoration:underline">Use the contact form</a> or email ajaved.kj@gmail.com.</p>      </div>
+    </section>
+
+    <!-- [LIGHT] HOW IT WORKS (for learners) -->
+    <section class="section section--light">
+      <div class="wrap">
+        <div class="sec-head" style="border-color:var(--hair-light)">
+          <div>
+            <span class="eyebrow">For learners</span>
+            <h2 class="text-section-title">How this chatbot <em>works</em></h2>
+          </div>
+          <p class="sec-head__meta">Four ideas · one small script</p>
+        </div>
+
+        <div class="cols-3" style="--tone:light">
+          <div class="col-item" style="border-color:var(--hair-light)">
+            <span class="col-item__num" style="color:var(--slate-strong)">01</span>
+            <h3>The system prompt</h3>
+            <p style="color:var(--body-light)">A hidden brief tells the AI who it is, what it knows (a short profile of me) and what it must not do. Changing this text changes the chatbot completely.</p>
+          </div>
+          <div class="col-item" style="border-color:var(--hair-light)">
+            <span class="col-item__num" style="color:var(--slate-strong)">02</span>
+            <h3>Conversation history</h3>
+            <p style="color:var(--body-light)">The AI has no memory. Every time you send a message, the page sends the whole conversation again so replies make sense.</p>
+          </div>
+          <div class="col-item" style="border-color:var(--hair-light)">
+            <span class="col-item__num" style="color:var(--slate-strong)">03</span>
+            <h3>The API call</h3>
+            <p style="color:var(--body-light)">The page sends one request to the Groq API with the key, the system prompt and the history. The reply comes back as text and is shown in the chat.</p>
+          </div>
+        </div>
+
+        <div class="split" style="margin-top:clamp(3rem,6vw,5rem)">
+          <div>
+            <span class="eyebrow">Use case</span>
+            <h3 class="text-lead">Why add this to a profile site?</h3>
+          </div>
+          <div>
+            <p class="text-body">Visitors rarely read a whole CV. A chatbot lets a recruiter or client ask a direct question — “Have you done mobile penetration testing?” — and get an instant, relevant answer, at any hour. The same pattern works for a shop’s FAQ, a course helper or a support desk.</p>
+            <p class="text-body"><strong>Security note:</strong> in this demo the API key sits in browser code, which is fine on your own computer but not on a public site — anyone could copy it. For a real launch, put the key on a small server that forwards the requests and limits how often visitors can use it.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer__base" style="margin-top:0;padding-top:0;border-top:0">
+        <span>© <span id="year">2026</span> Aamir Javed · Demo page</span>
+        <span><a href="index.html">Back to website</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Your key lives in config.js (git-ignored). See config.example.js -->
+  <script src="config.js"></script>
+  <script src="chatbot.js"></script>
+</body>
+</html>
