@@ -68,7 +68,8 @@ Nav, mobile menu and footer markup are **duplicated in each HTML page** — chan
 - [x] Browser check (no console errors, no horizontal overflow, accordion/menu/form tested)
 - [x] Real email address added to `contact.html`: ajaved.kj@gmail.com (footers show LinkedIn and CV only)
 - [ ] Phone number — not in CV, intentionally not shown; add only if wanted
-- [ ] Replace the 3 image placeholders with real photos
+- [x] Hero portrait added (`images/aamir-javed.jpg`, optimised from `Aamir_photo.jpg`; not yet pushed)
+- [ ] Replace the remaining 2 image placeholders (About workspace photo, Contact banner) with real photos
 - [ ] Decide whether 15 years is the figure to show (see Open questions)
 - [ ] Decide whether to publish the .docx CV publicly (it is linked as a download)
 - [ ] Connect contact form to a real service (currently demo only — nothing is sent)
@@ -78,17 +79,17 @@ Nav, mobile menu and footer markup are **duplicated in each HTML page** — chan
 - [ ] **"Download CV" links 404 on the live site** because `*.docx` is git-ignored. Decide: remove the links, or publish a CV PDF deliberately (see Open questions)
 - [x] Chatbot demo built and tested locally (`chatbot.html`): answers from profile, admits unknowns, remembers context, refuses attack requests, no overflow on mobile
 - [x] "Get in touch" buttons linked to the chatbot page; chat tested in direct, offline and proxy modes; relay logic tested with a mocked Groq reply
-- [x] "Chatbot" link added after "Contact" in the top menu, mobile menu and footer of index/experience/contact (checked at 900px, 375px; not yet pushed)
+- [x] "Chatbot" link added after "Contact" in the top menu, mobile menu and footer of index/experience/contact (checked at 900px, 375px; pushed in commit f6af468 and live)
 - [ ] **Deploy the Cloudflare Worker** (`worker/chat-proxy.js`), paste its address into `PROXY_URL` in `chatbot.js`, then test on the live site
 - [ ] Set Groq spend limit + Cloudflare rate-limit rule
 - [x] Chatbot work committed and pushed (commit 8713569, 2026-11-12). Live: https://ajavedgit.github.io/profile-website/ — "Get in touch" opens the chat, which shows the offline message until the Worker is deployed. `config.js` and key files return 404 on the live site (verified)
 - [ ] Final review of the live site
 
 ## Image placeholders to replace
-Placeholders are `.ph` blocks. To use a real image, replace the block with an `<img>` that has `alt` text and the same aspect-ratio class (`ar-45`, `ar-34`, `ar-219`).
+Placeholders are `.ph` blocks. To use a real image, replace the block with `<div class="photo ar-45"><img src="images/..." alt="..." width=".." height=".."></div>` (same aspect-ratio class: `ar-45`, `ar-34`, `ar-219`). `.photo img` uses `object-fit: cover; object-position: 50% 20%` so faces stay in frame. See the hero in `index.html` for an example. Keep the original photo as-is and put an optimised copy (about 1000px wide, JPEG quality ~80) in `images/`.
 | Page | Placeholder | Ratio |
 | :--- | :--- | :--- |
-| Home hero | Portrait photo | 4:5 |
+| Home hero | **Done** — portrait (`images/aamir-javed.jpg`) | 4:5 |
 | Home About | Workspace / casual photo | 3:4 |
 | Contact header | Wide banner | 21:9 |
 
@@ -111,4 +112,5 @@ Placeholders are `.ph` blocks. To use a real image, replace the block with an `<
 - **2026-11-12** — Built the chatbot demo (`chatbot.html`, `chatbot.js`, `config.example.js`). Found that the owner's key file was Groq (`gsk_`), not xAI Grok, so the code uses the Groq API. Found `groq api key.txt` was untracked and NOT ignored; added `config.js` and `*api*key*.txt` to `.gitignore` before anything could be committed. Key placed only in git-ignored `config.js`. Tested locally: replies in about 1 s, correct and grounded answers. Not committed or pushed.
 - **2026-11-12** — Linked all "Get in touch" buttons to `chatbot.html`. Made the chat safe for public visitors: offline mode, 20-question cap, stricter "profile only" scope, and a relay (`worker/chat-proxy.js`) so the key never reaches the browser. Tested: Get-in-touch click, on-topic and off-topic/injection questions, offline and proxy modes, and 10 relay edge cases. **Next:** owner deploys the Worker and sets `PROXY_URL`; then commit/push.
 - **2026-11-12** — Added a "Chatbot" menu item right after "Contact" (desktop nav, mobile menu, footer) on all three pages. Nav order is now About · Skills · Experience · Contact · Chatbot. Verified no crowding at 900px and no overflow at 375px. Not pushed yet.
+- **2026-11-12** — Added Aamir's portrait to the home hero: optimised copy `images/aamir-javed.jpg` (171 KB, from the 676 KB original `Aamir_photo.jpg`), new `.photo` style in `styles.css`, descriptive alt text. Checked at 1280px and 375px (loads, 4:5 crop keeps the face, no overflow). Not pushed yet. The original `Aamir_photo.jpg` is untracked in the project root.
 - **2026-11-04** — Set up git and GitHub: installed GitHub CLI, signed in as `ajavedgit`, created public repo https://github.com/ajavedgit/profile-website and pushed `main`. Added `.gitignore` so `*.docx`/`*.pdf` (the CV) are not published.

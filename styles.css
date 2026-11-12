@@ -198,6 +198,10 @@ button, input, select, textarea { font: inherit; color: inherit; }
   color: var(--slate);
 }
 .ph--dark .ph__label { background: var(--obsidian); color: var(--body-dark); box-shadow: 0 0 0 1px var(--hair-dark); }
+/* Real photos (replace a .ph placeholder with .photo + <img>) */
+.photo { position: relative; overflow: hidden; border-radius: 1rem; background: #DCD9D5; }
+.photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; }
+.hero__media .photo { box-shadow: 0 40px 80px -40px rgba(20, 21, 29, 0.45); border-radius: 1.25rem; }
 .ar-45 { aspect-ratio: 4 / 5; }
 .ar-34 { aspect-ratio: 3 / 4; }
 .ar-169 { aspect-ratio: 16 / 9; }
