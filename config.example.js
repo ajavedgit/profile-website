@@ -11,6 +11,7 @@ window.CHATBOT_CONFIG = {
   apiKey: "PASTE_YOUR_GROQ_API_KEY_HERE",
 
   // Optional settings (these are the defaults):
-  model: "openai/gpt-oss-120b",
-  reasoningEffort: "low"   // gpt-oss models only: "low" = fast and cheap, "high" = deeper thinking
+  model: "qwen/qwen3.8-27b"
+  // Other option: model: "openai/gpt-oss-120b" (a production model) with
+  // reasoningEffort: "low"   // gpt-oss models only: "low" = fast and cheap, "high" = deeper thinking
 };

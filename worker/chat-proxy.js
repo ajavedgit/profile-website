@@ -27,7 +27,7 @@ const ALLOWED_ORIGINS = [
   'http://localhost:8765'
 ];
 
-const MODEL = 'openai/gpt-oss-120b';
+const MODEL = 'qwen/qwen3.8-27b';   // a Groq "preview" model; if Groq retires it, switch to e.g. 'openai/gpt-oss-120b'
 const MAX_MESSAGES = 12;        // history length accepted per request
 const MAX_CHARS = 500;          // characters accepted per message
 const MAX_REPLY_TOKENS = 1000;  // caps cost per answer
@@ -105,7 +105,8 @@ export default {
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + env.GROQ_API_KEY },
       body: JSON.stringify({
         model: MODEL,
-        reasoning_effort: 'low',
+        // "low reasoning" is a gpt-oss setting only; Qwen is fastest and cheapest without it.
+        ...(MODEL.includes('gpt-oss') ? { reasoning_effort: 'low' } : {}),
         max_completion_tokens: MAX_REPLY_TOKENS,
         messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...messages]
       })

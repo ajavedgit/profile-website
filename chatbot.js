@@ -16,8 +16,9 @@
   /* ---------- 1. SETTINGS (override any of these in config.js) ---------- */
   var cfg = window.CHATBOT_CONFIG || {};
   var GROQ_URL = cfg.apiUrl || 'https://api.groq.com/openai/v1/chat/completions';
-  var MODEL = cfg.model || 'openai/gpt-oss-120b';
-  // gpt-oss models "think" before answering; low = faster and cheaper. Other models don't accept this setting.
+  var MODEL = cfg.model || 'qwen/qwen3.8-27b';
+  // Only set when you ask for it in config.js. gpt-oss models "think" before answering ("low" = faster and cheaper);
+  // Qwen answers fastest and cheapest without it, so by default nothing is sent for Qwen.
   var EFFORT = cfg.reasoningEffort || (MODEL.indexOf('gpt-oss') !== -1 ? 'low' : '');
 
   // After deploying worker/chat-proxy.js, paste its address here (it is safe to publish — it contains no key).
