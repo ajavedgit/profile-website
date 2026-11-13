@@ -1,0 +1,53 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Read(**/*.env)",
+
+      "Bash(cat *.env*)",
+      "Bash(type *.env*)",
+      "Bash(head *.env*)",
+      "Bash(tail *.env*)",
+      "Bash(less *.env*)",
+      "Bash(more *.env*)",
+      "Bash(grep * *.env*)",
+      "Bash(source *.env*)",
+      "PowerShell(Get-Content *.env*)",
+      "PowerShell(gc *.env*)",
+      "PowerShell(cat *.env*)",
+      "PowerShell(type *.env*)",
+      "PowerShell(Select-String * *.env*)",
+
+      "Bash(git push --force*)",
+      "Bash(git push -f*)",
+      "Bash(git push * --force*)",
+      "Bash(git push * -f*)",
+      "Bash(git push * +*)",
+      "Bash(git push --delete*)",
+      "Bash(git push * --delete*)",
+      "Bash(git reset --hard*)",
+      "Bash(git clean -f*)",
+      "Bash(git branch -D*)",
+
+      "Bash(rm -rf *)",
+      "Bash(rm -fr *)",
+      "Bash(rm -r *)",
+      "Bash(rm -R *)",
+      "Bash(rm --recursive *)",
+      "Bash(find * -delete*)",
+      "Bash(rd /s*)",
+      "Bash(rmdir /s*)",
+      "Bash(del /s*)",
+      "PowerShell(Remove-Item * -Recurse*)",
+      "PowerShell(Remove-Item -Recurse*)",
+      "PowerShell(rm * -Recurse*)",
+      "PowerShell(rm -Recurse*)",
+      "PowerShell(ri * -Recurse*)",
+      "PowerShell(rd /s*)",
+      "PowerShell(rmdir /s*)"
+    ]
+  }
+}
